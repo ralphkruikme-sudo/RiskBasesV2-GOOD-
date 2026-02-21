@@ -40,11 +40,6 @@ export default async function ProjectDashboardPage({ params }: PageProps) {
 
   if (!project) redirect("/app");
 
-  // If setup not completed, redirect to setup
-  if (project.setup_status !== "completed") {
-    redirect(`/app/projects/${id}/setup/manual/step-1`);
-  }
-
   // Gather all stats in parallel
   const [riskRes, actionRes, stakeholderRes, permitRes] = await Promise.all([
     supabase
