@@ -47,24 +47,13 @@ export default function Navbar() {
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link
-          href="/"
-          className="group flex items-center gap-2.5 font-bold text-lg text-navy"
-        >
-          <svg
-            className="h-7 w-7 text-accent transition-transform duration-200 group-hover:scale-110"
-            viewBox="0 0 24 24"
-            fill="none"
-          >
-            <path
-              d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <span className="tracking-tight">RiskBases</span>
+        <Link href="/" className="group flex items-center gap-2">
+          <img
+            src="/logo.svg"
+            alt="RiskBases"
+            className="h-8 transition-transform duration-200 group-hover:scale-105"
+          />
+          <span className="text-lg font-bold tracking-tight text-navy">RiskBases</span>
         </Link>
 
         {/* Desktop nav links */}

@@ -4,10 +4,10 @@ import { redirect } from "next/navigation";
 import PortfolioClient from "./PortfolioClient";
 
 export const metadata: Metadata = {
-  title: "Portfolio — RiskBases",
+  title: "Projects — RiskBases",
 };
 
-export default async function PortfolioPage() {
+export default async function ProjectsPage() {
   const supabase = await createClient();
 
   const {
@@ -19,7 +19,7 @@ export default async function PortfolioPage() {
   // Get user's workspace membership + workspace info
   const { data: membership } = await supabase
     .from("workspace_members")
-    .select("workspace_id, role, workspaces(id, name, slug)")
+    .select("workspace_id, role, workspaces(id, name)")
     .eq("user_id", user.id)
     .limit(1)
     .maybeSingle();
@@ -29,23 +29,24 @@ export default async function PortfolioPage() {
   const workspace = (membership as any).workspaces as {
     id: string;
     name: string;
-    slug: string;
   };
 
-  // Get subscription/plan
+  // Get subscription/plan (optional — may not exist yet)
   const { data: subscription } = await supabase
     .from("workspace_subscriptions")
-    .select("plan, status, trial_ends_at")
+    .select("plan_id, status, trial_ends_at")
     .eq("workspace_id", workspace.id)
     .maybeSingle();
 
-  const plan = subscription?.plan ?? "trial";
+  const plan = subscription?.plan_id ?? "standard";
   const trialEndsAt = subscription?.trial_ends_at ?? null;
 
   // Fetch projects for this workspace
   const { data: projects, error } = await supabase
     .from("projects")
-    .select("id, name, description, status, sector, reference, start_date, end_date, created_at")
+    .select(
+      "id, name, description, status, sector, reference, start_date, end_date, created_at"
+    )
     .eq("workspace_id", workspace.id)
     .order("created_at", { ascending: false });
 

@@ -14,6 +14,12 @@ const PROTECTED_PREFIXES = ["/app"];
 const AUTH_ROUTES = ["/login", "/signup"];
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Set x-pathname as a REQUEST header so server components can read it
+  // via headers(). Response headers are NOT readable by headers().
+  request.headers.set("x-pathname", pathname);
+
   let supabaseResponse = NextResponse.next({ request });
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -30,6 +36,14 @@ export async function middleware(request: NextRequest) {
         return request.cookies.getAll();
       },
       setAll(cookiesToSet) {
+        // 1. Update request cookies so downstream server components
+        //    see fresh tokens instead of stale ones.
+        cookiesToSet.forEach(({ name, value }) =>
+          request.cookies.set(name, value)
+        );
+        // 2. Re-create response with updated request (keeps x-pathname header)
+        supabaseResponse = NextResponse.next({ request });
+        // 3. Set cookies on response so the browser stores them
         cookiesToSet.forEach(({ name, value, options }) =>
           supabaseResponse.cookies.set(name, value, options)
         );
@@ -41,11 +55,6 @@ export async function middleware(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const { pathname } = request.nextUrl;
-
-  // Forward pathname so layouts can read it
-  supabaseResponse.headers.set("x-pathname", pathname);
 
   // ── Protected routes: redirect unauthenticated users to /login ──
   if (!user && PROTECTED_PREFIXES.some((p) => pathname.startsWith(p))) {

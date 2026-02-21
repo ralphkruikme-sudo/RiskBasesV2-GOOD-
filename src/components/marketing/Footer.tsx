@@ -34,17 +34,9 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
           {/* Brand + contact */}
           <div className="col-span-2">
-            <Link href="/" className="inline-flex items-center gap-2 text-lg font-bold text-navy">
-              <svg className="h-6 w-6 text-accent" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              RiskBases
+            <Link href="/" className="inline-flex items-center gap-2">
+              <img src="/logo.svg" alt="RiskBases" className="h-7" />
+              <span className="text-lg font-bold text-navy">RiskBases</span>
             </Link>
             <p className="mt-3 text-sm text-slate-500 max-w-xs leading-relaxed">
               Het risicomanagementplatform voor projectteams in bouw, infra en industrie.

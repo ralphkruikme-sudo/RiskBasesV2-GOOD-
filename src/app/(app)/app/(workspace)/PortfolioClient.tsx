@@ -20,7 +20,6 @@ interface Project {
 interface Workspace {
   id: string;
   name: string;
-  slug: string;
 }
 
 interface Props {
@@ -100,7 +99,7 @@ export default function PortfolioClient({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-slate-900">Portfolio</h1>
+            <h1 className="text-2xl font-bold text-slate-900">Projects</h1>
             <span
               className={`inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold ${planInfo.color}`}
             >
@@ -124,7 +123,7 @@ export default function PortfolioClient({
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
-          Nieuw project
+          New project
         </Link>
       </div>
 
@@ -152,7 +151,7 @@ export default function PortfolioClient({
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Zoek op naam, referentie of sector…"
+            placeholder="Search by name, reference, or sector…"
             className="w-full rounded-lg border border-slate-200 bg-white py-2 pl-10 pr-4 text-sm placeholder:text-slate-400 focus:outline-2 focus:outline-offset-0 focus:outline-accent"
           />
         </div>
@@ -182,9 +181,9 @@ export default function PortfolioClient({
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
                   </svg>
                 </div>
-                <h3 className="mt-4 text-sm font-semibold text-slate-900">Geen projecten</h3>
+                <h3 className="mt-4 text-sm font-semibold text-slate-900">No projects yet</h3>
                 <p className="mt-1 text-sm text-slate-500">
-                  Maak je eerste project aan om te beginnen.
+                  Create your first project to get started.
                 </p>
                 <Link
                   href="/app/projects/new"
@@ -193,17 +192,17 @@ export default function PortfolioClient({
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                   </svg>
-                  Nieuw project
+                  New project
                 </Link>
               </>
             ) : (
               <>
-                <p className="text-sm text-slate-500">Geen resultaten gevonden.</p>
+                <p className="text-sm text-slate-500">No results found.</p>
                 <button
                   onClick={() => { setSearch(""); setStatusFilter("all"); }}
                   className="mt-2 text-sm font-medium text-accent hover:underline"
                 >
-                  Filters wissen
+                  Clear filters
                 </button>
               </>
             )}
@@ -217,7 +216,7 @@ export default function PortfolioClient({
                     Project
                   </th>
                   <th className="py-3 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500 hidden sm:table-cell">
-                    Referentie
+                    Reference
                   </th>
                   <th className="py-3 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500 hidden md:table-cell">
                     Sector
@@ -226,7 +225,7 @@ export default function PortfolioClient({
                     Status
                   </th>
                   <th className="py-3 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500 hidden lg:table-cell">
-                    Aangemaakt
+                    Created
                   </th>
                   <th className="py-3 px-4 w-10" />
                 </tr>
@@ -282,7 +281,6 @@ export default function PortfolioClient({
           </div>
         )}
       </div>
-
     </div>
   );
 }

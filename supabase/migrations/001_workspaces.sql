@@ -8,6 +8,7 @@ create table if not exists public.workspaces (
   id           uuid primary key default gen_random_uuid(),
   name         text not null,
   slug         text not null unique,
+  created_by   uuid references auth.users(id) on delete cascade,
   created_at   timestamptz not null default now(),
   updated_at   timestamptz not null default now()
 );
@@ -37,7 +38,7 @@ create policy "Owners can update workspace"
 -- Authenticated users can create workspaces (for onboarding)
 create policy "Authenticated users can create workspaces"
   on public.workspaces for insert
-  with check (auth.uid() is not null);
+  with check (auth.uid() = created_by);
 
 
 -- ── 2. Workspace Members ───────────────────────────────

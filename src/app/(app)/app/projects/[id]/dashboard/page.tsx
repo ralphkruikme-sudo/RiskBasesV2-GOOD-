@@ -20,7 +20,7 @@ export default async function ProjectDashboardPage({ params }: PageProps) {
     .eq("id", id)
     .single();
 
-  if (!project) redirect("/app/portfolio");
+  if (!project) redirect("/app");
 
   // If setup not completed, redirect back
   if (project.setup_status !== "completed") {
@@ -55,13 +55,13 @@ export default async function ProjectDashboardPage({ params }: PageProps) {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <Link
-            href="/app/portfolio"
+            href="/app"
             className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 mb-2"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
-            Portfolio
+            All projects
           </Link>
           <h1 className="text-2xl font-bold text-slate-900">{project.name}</h1>
           <div className="flex items-center gap-3 mt-1">

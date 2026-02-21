@@ -1,27 +1,17 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 
 /* ─────────────────────────────────────────────────────
    Server Action — Create workspace during onboarding.
-   Creates 4 rows in a logical sequence:
-     1. workspaces
-     2. workspace_members  (owner)
-     3. user_settings
-     4. workspace_subscriptions (trial, 14 days)
+   Uses the authenticated cookie-based Supabase client.
+   Returns { success: true } so the client can do a hard
+   navigation (no server-side redirect that might loop).
    ────────────────────────────────────────────────────── */
 
 export interface OnboardingResult {
   error?: string;
-}
-
-function slugify(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 48);
+  success?: boolean;
 }
 
 export async function createWorkspace(
@@ -39,16 +29,20 @@ export async function createWorkspace(
 
   const supabase = await createClient();
 
-  // Verify auth
+  // Verify auth — refreshes the session token in cookies
   const {
     data: { user },
+    error: userError,
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (userError || !user) {
+    console.log("Auth error:", JSON.stringify(userError, null, 2));
     return { error: "Je bent niet ingelogd. Ververs de pagina." };
   }
 
-  // Check if user already has a workspace (race condition guard)
+  console.log("USER.ID", user.id);
+
+  // Race-condition guard: already has workspace
   const { data: existing } = await supabase
     .from("workspace_members")
     .select("id")
@@ -57,24 +51,23 @@ export async function createWorkspace(
     .maybeSingle();
 
   if (existing) {
-    redirect("/app");
+    console.log("User already has workspace_members row — returning success");
+    return { success: true };
   }
 
-  // Generate unique slug
-  const baseSlug = slugify(name) || "workspace";
-  const slug = `${baseSlug}-${Date.now().toString(36)}`;
+  console.log("PAYLOAD", { name, created_by: user.id });
 
   // 1. Create workspace
   const { data: workspace, error: wsError } = await supabase
     .from("workspaces")
-    .insert({ name, slug })
+    .insert({ name, created_by: user.id })
     .select("id")
     .single();
 
   if (wsError || !workspace) {
-    console.error("Workspace creation error:", wsError);
+    console.log("Step 1 full error:", JSON.stringify(wsError, null, 2));
     return {
-      error: "Kon workspace niet aanmaken. Probeer het opnieuw.",
+      error: `Stap 1 — Workspace aanmaken mislukt: ${wsError?.message ?? JSON.stringify(wsError)}`,
     };
   }
 
@@ -88,45 +81,43 @@ export async function createWorkspace(
     });
 
   if (memberError) {
-    console.error("Member creation error:", memberError);
-    // Clean up orphaned workspace
+    console.log("Step 2 full error:", JSON.stringify(memberError, null, 2));
     await supabase.from("workspaces").delete().eq("id", workspace.id);
     return {
-      error: "Kon lidmaatschap niet aanmaken. Probeer het opnieuw.",
+      error: `Stap 2 — Lidmaatschap aanmaken mislukt: ${memberError.message ?? JSON.stringify(memberError)}`,
     };
   }
 
-  // 3. Create user settings
+  // 3. Upsert user settings (non-blocking)
   const { error: settingsError } = await supabase
     .from("user_settings")
-    .insert({
-      user_id: user.id,
-      default_workspace_id: workspace.id,
-      locale: "nl",
-    });
+    .upsert(
+      {
+        user_id: user.id,
+        default_workspace_id: workspace.id,
+        language: "nl",
+        timezone: "Europe/Amsterdam",
+      },
+      { onConflict: "user_id" }
+    );
 
   if (settingsError) {
-    // Non-critical — log but continue
-    console.error("User settings creation error:", settingsError);
+    console.warn("Step 3 settings upsert failed (non-blocking):", JSON.stringify(settingsError, null, 2));
   }
 
-  // 4. Create trial subscription (14 days)
-  const trialEnd = new Date();
-  trialEnd.setDate(trialEnd.getDate() + 14);
-
+  // 4. Create trial subscription (non-blocking)
   const { error: subError } = await supabase
     .from("workspace_subscriptions")
     .insert({
       workspace_id: workspace.id,
-      plan: "trial",
-      status: "active",
-      trial_ends_at: trialEnd.toISOString(),
+      plan_id: "standard",
+      status: "trialing",
     });
 
   if (subError) {
-    // Non-critical — log but continue
-    console.error("Subscription creation error:", subError);
+    console.warn("Step 4 subscription insert failed (non-blocking):", JSON.stringify(subError, null, 2));
   }
 
-  redirect("/app");
+  console.log("Onboarding complete — returning success");
+  return { success: true };
 }

@@ -17,7 +17,7 @@ export async function getProjectForSetup(projectId: string) {
     .eq("id", projectId)
     .single();
 
-  if (!project) redirect("/app/portfolio");
+  if (!project) redirect("/app");
 
   return { supabase, user, project };
 }

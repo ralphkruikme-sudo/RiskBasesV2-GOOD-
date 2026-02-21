@@ -1,14 +1,24 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { createWorkspace, type OnboardingResult } from "./actions";
 import Link from "next/link";
 
 export default function OnboardingPage() {
+  const router = useRouter();
   const [state, formAction, isPending] = useActionState<
     OnboardingResult | null,
     FormData
   >(createWorkspace, null);
+
+  // On success, do a hard navigation to /app
+  useEffect(() => {
+    if (state?.success) {
+      router.replace("/app");
+      router.refresh();
+    }
+  }, [state?.success, router]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-slate-50 px-4">
@@ -16,22 +26,10 @@ export default function OnboardingPage() {
         {/* Logo */}
         <Link
           href="/"
-          className="mb-8 flex items-center justify-center gap-2.5 text-xl font-bold text-navy"
+          className="mb-8 flex items-center justify-center gap-2.5"
         >
-          <svg
-            className="h-8 w-8 text-accent"
-            viewBox="0 0 24 24"
-            fill="none"
-          >
-            <path
-              d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          RiskBases
+          <img src="/logo.svg" alt="RiskBases" className="h-9" />
+          <span className="text-xl font-bold text-navy">RiskBases</span>
         </Link>
 
         <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
