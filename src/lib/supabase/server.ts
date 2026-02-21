@@ -50,8 +50,26 @@ export const getUser = cache(async () => {
 /**
  * Cached workspace membership lookup — runs only once per request.
  * Returns the first workspace membership for the given user, or null.
+ *
+ * NOTE: This is a lightweight check (no join) used by layout guards.
+ * Pages that need workspace details should query separately.
  */
 export const getWorkspaceMembership = cache(async (userId: string) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("workspace_members")
+    .select("workspace_id, role")
+    .eq("user_id", userId)
+    .limit(1)
+    .maybeSingle();
+  return { membership: data, error };
+});
+
+/**
+ * Cached full workspace membership with workspace details.
+ * Used by pages that need the workspace name etc.
+ */
+export const getWorkspaceMembershipFull = cache(async (userId: string) => {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("workspace_members")

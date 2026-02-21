@@ -1,49 +1,20 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useActionState } from "react";
+import { login, type LoginResult } from "./actions";
 import OAuthButtons from "@/components/ui/OAuthButtons";
 
 function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  // Show message from callback errors or redirect params
   const callbackError = searchParams.get("error");
   const redirectedFrom = searchParams.get("redirectedFrom");
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-
-    const supabase = createClient();
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (authError) {
-      setLoading(false);
-      if (authError.message.includes("Email not confirmed")) {
-        setError("Je e-mailadres is nog niet bevestigd. Check je inbox.");
-      } else if (authError.message.includes("Invalid login credentials")) {
-        setError("Onjuist e-mailadres of wachtwoord.");
-      } else {
-        setError(authError.message);
-      }
-      return;
-    }
-
-    // Hard redirect — avoids stale React state and double navigation
-    window.location.href = redirectedFrom || "/app";
-  }
+  const [state, formAction, isPending] = useActionState<
+    LoginResult | null,
+    FormData
+  >(login, null);
 
   return (
     <div className="w-full max-w-sm">
@@ -54,9 +25,9 @@ function LoginForm() {
         </p>
 
         {/* Error messages */}
-        {(error || callbackError) && (
+        {(state?.error || callbackError) && (
           <div className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-            {error ||
+            {state?.error ||
               (callbackError === "auth_callback_failed"
                 ? "Er ging iets mis met de e-mailbevestiging. Probeer opnieuw."
                 : "Er is een fout opgetreden.")}
@@ -78,7 +49,10 @@ function LoginForm() {
           </div>
         </div>
 
-        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+        <form className="mt-6 space-y-4" action={formAction}>
+          {/* Pass redirect target into the server action */}
+          <input type="hidden" name="redirectTo" value={redirectedFrom || "/app"} />
+
           <div>
             <label
               htmlFor="email"
@@ -88,11 +62,10 @@ function LoginForm() {
             </label>
             <input
               id="email"
+              name="email"
               type="email"
               autoComplete="email"
               required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
               placeholder="naam@bedrijf.nl"
               className="block w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm placeholder:text-slate-400 focus:outline-2 focus:outline-offset-0 focus:outline-accent"
             />
@@ -107,28 +80,27 @@ function LoginForm() {
             </label>
             <input
               id="password"
+              name="password"
               type="password"
               autoComplete="current-password"
               required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder=""
               className="block w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm placeholder:text-slate-400 focus:outline-2 focus:outline-offset-0 focus:outline-accent"
             />
           </div>
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={isPending}
             className="w-full rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? (
+            {isPending ? (
               <span className="flex items-center justify-center gap-2">
                 <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                 </svg>
-                Inloggen…
+                Inloggen
               </span>
             ) : (
               "Inloggen"

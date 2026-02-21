@@ -1,4 +1,5 @@
-import { getUser } from "@/lib/supabase/server";
+import { getUser, getWorkspaceMembership } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 import WorkspaceTopbar from "./WorkspaceTopbar";
 
 export default async function WorkspaceLayout({
@@ -7,6 +8,13 @@ export default async function WorkspaceLayout({
   children: React.ReactNode;
 }) {
   const { user } = await getUser();
+  if (!user) redirect("/login");
+
+  // Gate: users without a workspace belong in onboarding
+  const { membership, error: memberError } = await getWorkspaceMembership(user.id);
+  if (!membership && !memberError) {
+    redirect("/app/onboarding");
+  }
 
   const displayName =
     user?.user_metadata?.full_name ||

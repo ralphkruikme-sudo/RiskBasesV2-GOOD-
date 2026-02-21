@@ -254,32 +254,97 @@ export default function HomeContent() {
   return (
     <>
       {/* ─── HERO ─── */}
-      <section className="relative overflow-hidden bg-navy">
-        <div className="pointer-events-none absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCBmaWxsPSJ1cmwoI2cpIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIi8+PC9zdmc+')] opacity-60" />
-        <div className="pointer-events-none absolute top-[-30%] left-1/2 -translate-x-1/2 h-[600px] w-[900px] rounded-full bg-accent/10 blur-3xl" />
+      <section className="bg-navy">
 
-        <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-28 sm:py-36 text-center">
-          <div className="animate-fade-in-up">
-            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-slate-300 backdrop-blur-sm mb-6">
-              {t.heroBadge}
-            </span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
-              {t.heroTitle1}
-              <br />
-              <span className="text-accent">{t.heroTitle2}</span>
-            </h1>
-            <p className="mt-6 mx-auto max-w-2xl text-lg sm:text-xl text-slate-300 leading-relaxed">
-              {t.heroDesc}
-            </p>
-          </div>
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-200">
-            <Link href="/book-demo" className="inline-flex items-center rounded-lg bg-accent px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-accent/20 transition-all duration-200 hover:bg-accent-hover hover:shadow-xl hover:shadow-accent/30 active:scale-[.98]">
-              {t.ctaDemo}
-              <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
-            </Link>
-            <Link href="/signup" className="inline-flex items-center rounded-lg border border-white/20 bg-white/5 px-7 py-3.5 text-base font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/10 hover:border-white/30 active:scale-[.98]">
-              {t.ctaTrial}
-            </Link>
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-28 lg:py-36">
+          <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
+            <div>
+              <div className="animate-fade-in-up text-center lg:text-left">
+                <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-slate-300 backdrop-blur-sm mb-6">
+                  {t.heroBadge}
+                </span>
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.08]">
+                  {t.heroTitle1}
+                  <br />
+                  <span className="text-accent">{t.heroTitle2}</span>
+                </h1>
+                <p className="mt-6 max-w-2xl mx-auto lg:mx-0 text-lg sm:text-xl text-slate-300 leading-relaxed">
+                  {t.heroDesc}
+                </p>
+              </div>
+              <div className="mt-10 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 animate-fade-in-up delay-200">
+                <Link href="/book-demo" className="inline-flex items-center rounded-lg bg-accent px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-accent/20 transition-all duration-200 hover:bg-accent-hover hover:shadow-xl hover:shadow-accent/30 active:scale-[.98]">
+                  {t.ctaDemo}
+                  <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                </Link>
+                <Link href="/signup" className="inline-flex items-center rounded-lg border border-white/20 bg-white/5 px-7 py-3.5 text-base font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/10 hover:border-white/30 active:scale-[.98]">
+                  {t.ctaTrial}
+                </Link>
+              </div>
+            </div>
+            <div className="hidden lg:block">
+              <div className="rounded-2xl border border-white/10 bg-white/[.03] p-6">
+                {/* Mock dashboard header */}
+                <div className="flex items-center justify-between mb-5">
+                  <div className="flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-accent" />
+                    <div className="h-2.5 w-24 rounded bg-white/10" />
+                  </div>
+                  <div className="flex gap-1.5">
+                    <div className="h-2 w-8 rounded bg-white/10" />
+                    <div className="h-2 w-8 rounded bg-white/10" />
+                  </div>
+                </div>
+                {/* Risk matrix 5×5 */}
+                <div className="grid grid-cols-5 gap-1.5">
+                  {/* Row 5 (top - highest probability) */}
+                  <div className="aspect-square rounded bg-yellow-500/70" />
+                  <div className="aspect-square rounded bg-orange-500/70" />
+                  <div className="aspect-square rounded bg-red-500/80" />
+                  <div className="aspect-square rounded bg-red-500/90" />
+                  <div className="aspect-square rounded bg-red-500" />
+                  {/* Row 4 */}
+                  <div className="aspect-square rounded bg-green-500/60" />
+                  <div className="aspect-square rounded bg-yellow-500/70" />
+                  <div className="aspect-square rounded bg-orange-500/70" />
+                  <div className="aspect-square rounded bg-red-500/80" />
+                  <div className="aspect-square rounded bg-red-500/90" />
+                  {/* Row 3 */}
+                  <div className="aspect-square rounded bg-green-500/50" />
+                  <div className="aspect-square rounded bg-green-500/60" />
+                  <div className="aspect-square rounded bg-yellow-500/70" />
+                  <div className="aspect-square rounded bg-orange-500/70" />
+                  <div className="aspect-square rounded bg-red-500/80" />
+                  {/* Row 2 */}
+                  <div className="aspect-square rounded bg-green-500/40" />
+                  <div className="aspect-square rounded bg-green-500/50" />
+                  <div className="aspect-square rounded bg-green-500/60" />
+                  <div className="aspect-square rounded bg-yellow-500/70" />
+                  <div className="aspect-square rounded bg-orange-500/70" />
+                  {/* Row 1 (bottom - lowest probability) */}
+                  <div className="aspect-square rounded bg-green-500/30" />
+                  <div className="aspect-square rounded bg-green-500/40" />
+                  <div className="aspect-square rounded bg-green-500/50" />
+                  <div className="aspect-square rounded bg-green-500/60" />
+                  <div className="aspect-square rounded bg-yellow-500/70" />
+                </div>
+                {/* Mock stats row */}
+                <div className="mt-5 grid grid-cols-3 gap-3">
+                  <div className="rounded-lg bg-white/[.05] p-3">
+                    <div className="h-2 w-8 rounded bg-white/10 mb-2" />
+                    <div className="h-5 w-12 rounded bg-white/15" />
+                  </div>
+                  <div className="rounded-lg bg-white/[.05] p-3">
+                    <div className="h-2 w-10 rounded bg-white/10 mb-2" />
+                    <div className="h-5 w-10 rounded bg-white/15" />
+                  </div>
+                  <div className="rounded-lg bg-white/[.05] p-3">
+                    <div className="h-2 w-6 rounded bg-white/10 mb-2" />
+                    <div className="h-5 w-14 rounded bg-white/15" />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -287,25 +352,25 @@ export default function HomeContent() {
       <LogoBar />
 
       {/* ─── PROBLEM ─── */}
-      <section className="py-24 bg-white">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+      <section className="py-20 lg:py-28 bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center lg:text-left">
           <span className="text-xs font-semibold uppercase tracking-widest text-accent">{t.problemLabel}</span>
-          <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-navy leading-tight">{t.problemTitle}</h2>
-          <p className="mt-5 text-lg text-slate-500 leading-relaxed max-w-3xl mx-auto">{t.problemDesc}</p>
+          <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-navy leading-tight max-w-3xl">{t.problemTitle}</h2>
+          <p className="mt-5 text-lg text-slate-500 leading-relaxed max-w-3xl mx-auto lg:mx-0">{t.problemDesc}</p>
         </div>
       </section>
 
       {/* ─── SOLUTION ─── */}
-      <section id="product" className="py-24 bg-slate-50 scroll-mt-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <section id="product" className="py-20 lg:py-28 bg-slate-50 scroll-mt-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <span className="text-xs font-semibold uppercase tracking-widest text-accent">{t.solutionLabel}</span>
             <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-navy leading-tight">{t.solutionTitle}</h2>
             <p className="mt-5 text-lg text-slate-500 leading-relaxed max-w-3xl mx-auto">{t.solutionDesc}</p>
           </div>
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {t.solutionCards.map((s) => (
-              <div key={s.title} className="rounded-xl border border-slate-200 bg-white p-6 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
+              <div key={s.title} className="rounded-xl border border-slate-200 bg-white p-8 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
                 <h3 className="text-base font-semibold text-navy">{s.title}</h3>
                 <p className="mt-2 text-sm text-slate-500 leading-relaxed">{s.desc}</p>
               </div>
@@ -315,8 +380,8 @@ export default function HomeContent() {
       </section>
 
       {/* ─── HOW IT WORKS ─── */}
-      <section className="py-24 bg-white">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 lg:py-28 bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <span className="text-xs font-semibold uppercase tracking-widest text-accent">{t.howLabel}</span>
             <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-navy leading-tight">{t.howTitle}</h2>
@@ -337,16 +402,16 @@ export default function HomeContent() {
       </section>
 
       {/* ─── MODULES ─── */}
-      <section id="modules" className="py-24 bg-slate-50 scroll-mt-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <section id="modules" className="py-20 lg:py-28 bg-slate-50 scroll-mt-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <span className="text-xs font-semibold uppercase tracking-widest text-accent">{t.modulesLabel}</span>
             <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-navy leading-tight">{t.modulesTitle}</h2>
             <p className="mt-5 text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">{t.modulesDesc}</p>
           </div>
-          <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {t.moduleNames.map((name, i) => (
-              <div key={name} className={`group relative rounded-xl border bg-white p-6 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 ${moduleLive[i] ? "border-slate-200" : "border-dashed border-slate-300"}`}>
+              <div key={name} className={`group relative rounded-xl border bg-white p-8 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 ${moduleLive[i] ? "border-slate-200" : "border-dashed border-slate-300"}`}>
                 <span className={`absolute top-4 right-4 inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${moduleLive[i] ? "bg-green-50 text-green-700" : "bg-slate-100 text-slate-500"}`}>
                   {moduleLive[i] ? t.moduleLive : t.moduleSoon}
                 </span>
@@ -362,15 +427,15 @@ export default function HomeContent() {
       </section>
 
       {/* ─── FEATURES ─── */}
-      <section className="py-24 bg-white">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 lg:py-28 bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <span className="text-xs font-semibold uppercase tracking-widest text-accent">{t.featuresLabel}</span>
             <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-navy leading-tight">{t.featuresTitle}</h2>
           </div>
-          <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {t.featureNames.map((name, i) => (
-              <div key={name} className="flex items-start gap-4">
+              <div key={name} className="flex items-start gap-4 rounded-xl border border-slate-200 p-6">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
                   <Icon d={featureIcons[i]} />
                 </div>
@@ -385,8 +450,8 @@ export default function HomeContent() {
       </section>
 
       {/* ─── TRUST & SECURITY ─── */}
-      <section className="py-24 bg-navy">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <section className="py-20 lg:py-28 bg-navy">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <span className="text-xs font-semibold uppercase tracking-widest text-accent">{t.trustLabel}</span>
             <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-white leading-tight">{t.trustTitle}</h2>
@@ -404,8 +469,8 @@ export default function HomeContent() {
       </section>
 
       {/* ─── FINAL CTA ─── */}
-      <section className="py-24 bg-gradient-to-b from-slate-50 to-white">
-        <div className="mx-auto max-w-3xl text-center px-4">
+      <section className="py-28 lg:py-36 bg-gradient-to-b from-slate-50 to-white">
+        <div className="mx-auto max-w-4xl text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-navy">{t.ctaTitle}</h2>
           <p className="mt-5 text-lg text-slate-500 leading-relaxed">{t.ctaDesc}</p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">

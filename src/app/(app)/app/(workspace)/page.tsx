@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { createClient, getUser, getWorkspaceMembership } from "@/lib/supabase/server";
+import { createClient, getUser, getWorkspaceMembershipFull } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import PortfolioClient from "./PortfolioClient";
 
@@ -12,7 +12,7 @@ export default async function ProjectsPage() {
   const { user } = await getUser();
   if (!user) redirect("/login");
 
-  const { membership } = await getWorkspaceMembership(user.id);
+  const { membership } = await getWorkspaceMembershipFull(user.id);
   if (!membership) redirect("/app/onboarding");
 
   const workspace = (membership as any).workspaces as {
