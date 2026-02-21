@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { getUser } from "@/lib/supabase/server";
 import WorkspaceTopbar from "./WorkspaceTopbar";
 
 export default async function WorkspaceLayout({
@@ -6,10 +6,7 @@ export default async function WorkspaceLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { user } = await getUser();
 
   const displayName =
     user?.user_metadata?.full_name ||

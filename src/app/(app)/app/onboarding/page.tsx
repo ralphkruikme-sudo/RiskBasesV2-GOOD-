@@ -1,12 +1,10 @@
 "use client";
 
 import { useActionState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { createWorkspace, type OnboardingResult } from "./actions";
 import Link from "next/link";
 
 export default function OnboardingPage() {
-  const router = useRouter();
   const [state, formAction, isPending] = useActionState<
     OnboardingResult | null,
     FormData
@@ -15,10 +13,9 @@ export default function OnboardingPage() {
   // On success, do a hard navigation to /app
   useEffect(() => {
     if (state?.success) {
-      router.replace("/app");
-      router.refresh();
+      window.location.href = "/app";
     }
-  }, [state?.success, router]);
+  }, [state?.success]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-slate-50 px-4">

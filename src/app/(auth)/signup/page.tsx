@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { siteUrl } from "@/lib/supabase/env";
+import OAuthButtons from "@/components/ui/OAuthButtons";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -30,7 +32,7 @@ export default function SignupPage() {
       password,
       options: {
         data: { full_name: name },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${siteUrl}/auth/callback`,
       },
     });
 
@@ -61,6 +63,21 @@ export default function SignupPage() {
             {error}
           </div>
         )}
+
+        {/* Social signup */}
+        <div className="mt-6">
+          <OAuthButtons />
+        </div>
+
+        {/* Divider */}
+        <div className="relative mt-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-slate-200" />
+          </div>
+          <div className="relative flex justify-center text-xs">
+            <span className="bg-white px-3 text-slate-400 uppercase tracking-wider">of</span>
+          </div>
+        </div>
 
         <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
           <div>

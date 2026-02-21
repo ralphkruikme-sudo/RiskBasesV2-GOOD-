@@ -7,6 +7,7 @@
 
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { cache } from "react";
 import { supabaseUrl, supabaseAnonKey } from "./env";
 
 export async function createClient() {
@@ -31,3 +32,32 @@ export async function createClient() {
     },
   });
 }
+
+/**
+ * Cached getUser — calls Supabase auth.getUser() only ONCE per
+ * server request, no matter how many layouts/pages call it.
+ * React's cache() deduplicates within the same request lifecycle.
+ */
+export const getUser = cache(async () => {
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+  return { user, error };
+});
+
+/**
+ * Cached workspace membership lookup — runs only once per request.
+ * Returns the first workspace membership for the given user, or null.
+ */
+export const getWorkspaceMembership = cache(async (userId: string) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("workspace_members")
+    .select("workspace_id, role, workspaces(id, name)")
+    .eq("user_id", userId)
+    .limit(1)
+    .maybeSingle();
+  return { membership: data, error };
+});

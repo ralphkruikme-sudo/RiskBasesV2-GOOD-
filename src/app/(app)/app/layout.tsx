@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { getUser, getWorkspaceMembership } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 
@@ -7,10 +7,7 @@ export default async function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { user } = await getUser();
 
   if (!user) {
     redirect("/login");
@@ -21,30 +18,15 @@ export default async function AppLayout({
   const pathname = headersList.get("x-pathname") ?? "";
   const isOnboarding = pathname.includes("/onboarding");
 
-  const { data: members, error: memberError } = await supabase
-    .from("workspace_members")
-    .select("workspace_id")
-    .eq("user_id", user.id)
-    .limit(1);
+  const { membership, error: memberError } = await getWorkspaceMembership(user.id);
+  const hasMembership = !!membership;
 
-  const memberCount = members?.length ?? 0;
-  const defaultWsId = members?.[0]?.workspace_id ?? null;
-
-  console.log("[AppLayout guard]", {
-    userId: user.id,
-    pathname,
-    isOnboarding,
-    memberCount,
-    defaultWorkspaceId: defaultWsId,
-    memberError: memberError?.message ?? null,
-  });
-
-  if (!isOnboarding && memberCount === 0 && !memberError) {
+  if (!isOnboarding && !hasMembership && !memberError) {
     redirect("/app/onboarding");
   }
 
   // If user IS on onboarding but already has a membership, send to /app
-  if (isOnboarding && memberCount > 0) {
+  if (isOnboarding && hasMembership) {
     redirect("/app");
   }
 

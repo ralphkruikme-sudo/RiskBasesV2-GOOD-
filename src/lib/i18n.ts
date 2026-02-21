@@ -49,6 +49,21 @@ export interface Dictionary {
     marketingDesc: string;
     save: string;
   };
+  footer: {
+    product: string;
+    overview: string;
+    modules: string;
+    pricing: string;
+    about: string;
+    faq: string;
+    getStarted: string;
+    bookDemo: string;
+    freeStart: string;
+    legal: string;
+    privacy: string;
+    terms: string;
+    tagline: string;
+  };
 }
 
 /* ─── Dictionaries ─── */
@@ -80,6 +95,21 @@ const nl: Dictionary = {
     marketingDesc: "Wordt gebruikt om gepersonaliseerde advertenties te tonen.",
     save: "Voorkeuren opslaan",
   },
+  footer: {
+    product: "Product",
+    overview: "Overzicht",
+    modules: "Modules",
+    pricing: "Prijzen",
+    about: "Over ons",
+    faq: "FAQ",
+    getStarted: "Aan de slag",
+    bookDemo: "Plan een demo",
+    freeStart: "Gratis starten",
+    legal: "Juridisch",
+    privacy: "Privacybeleid",
+    terms: "Algemene voorwaarden",
+    tagline: "Het risicomanagementplatform voor projectteams in bouw, infra en industrie.",
+  },
 };
 
 const en: Dictionary = {
@@ -109,6 +139,21 @@ const en: Dictionary = {
     marketingDesc: "Used to show personalized advertisements.",
     save: "Save preferences",
   },
+  footer: {
+    product: "Product",
+    overview: "Overview",
+    modules: "Modules",
+    pricing: "Pricing",
+    about: "About",
+    faq: "FAQ",
+    getStarted: "Get Started",
+    bookDemo: "Book a demo",
+    freeStart: "Start for free",
+    legal: "Legal",
+    privacy: "Privacy Policy",
+    terms: "Terms of Service",
+    tagline: "The risk management platform for project teams in construction, infrastructure, and industry.",
+  },
 };
 
 const de: Dictionary = {
@@ -137,6 +182,21 @@ const de: Dictionary = {
     marketing: "Marketing",
     marketingDesc: "Wird verwendet, um personalisierte Werbung anzuzeigen.",
     save: "Einstellungen speichern",
+  },
+  footer: {
+    product: "Produkt",
+    overview: "Übersicht",
+    modules: "Module",
+    pricing: "Preise",
+    about: "Über uns",
+    faq: "FAQ",
+    getStarted: "Loslegen",
+    bookDemo: "Demo buchen",
+    freeStart: "Kostenlos starten",
+    legal: "Rechtliches",
+    privacy: "Datenschutz",
+    terms: "AGB",
+    tagline: "Die Risikomanagement-Plattform für Projektteams in Bau, Infrastruktur und Industrie.",
   },
 };
 

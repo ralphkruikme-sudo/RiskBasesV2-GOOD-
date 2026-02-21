@@ -38,3 +38,11 @@ export const supabaseAnonKey = validate(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   "NEXT_PUBLIC_SUPABASE_ANON_KEY"
 );
+
+/**
+ * The public-facing site URL used for auth redirect links in emails.
+ * Falls back to window.location.origin on the client, or localhost on the server.
+ */
+export const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (typeof window !== "undefined" ? window.location.origin : "http://localhost:3000");

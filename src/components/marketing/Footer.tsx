@@ -1,33 +1,38 @@
-import Link from "next/link";
+"use client";
 
-const footerColumns = [
-  {
-    heading: "Product",
-    links: [
-      { href: "/#product", label: "Overzicht" },
-      { href: "/#modules", label: "Modules" },
-      { href: "/pricing", label: "Prijzen" },
-      { href: "/about", label: "Over ons" },
-      { href: "/faq", label: "FAQ" },
-    ],
-  },
-  {
-    heading: "Aan de slag",
-    links: [
-      { href: "/book-demo", label: "Plan een demo" },
-      { href: "/signup", label: "Gratis starten" },
-    ],
-  },
-  {
-    heading: "Juridisch",
-    links: [
-      { href: "/legal/privacy", label: "Privacybeleid" },
-      { href: "/legal/terms", label: "Algemene voorwaarden" },
-    ],
-  },
-];
+import Link from "next/link";
+import { useLocale } from "@/components/providers/LocaleProvider";
 
 export default function Footer() {
+  const { t } = useLocale();
+
+  const footerColumns = [
+    {
+      heading: t.footer.product,
+      links: [
+        { href: "/#product", label: t.footer.overview },
+        { href: "/#modules", label: t.footer.modules },
+        { href: "/pricing", label: t.footer.pricing },
+        { href: "/about", label: t.footer.about },
+        { href: "/faq", label: t.footer.faq },
+      ],
+    },
+    {
+      heading: t.footer.getStarted,
+      links: [
+        { href: "/book-demo", label: t.footer.bookDemo },
+        { href: "/signup", label: t.footer.freeStart },
+      ],
+    },
+    {
+      heading: t.footer.legal,
+      links: [
+        { href: "/legal/privacy", label: t.footer.privacy },
+        { href: "/legal/terms", label: t.footer.terms },
+      ],
+    },
+  ];
+
   return (
     <footer className="border-t border-slate-200 bg-slate-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14">
@@ -39,7 +44,7 @@ export default function Footer() {
               <span className="text-lg font-bold text-navy">RiskBases</span>
             </Link>
             <p className="mt-3 text-sm text-slate-500 max-w-xs leading-relaxed">
-              Het risicomanagementplatform voor projectteams in bouw, infra en industrie.
+              {t.footer.tagline}
             </p>
 
             <div className="mt-5 space-y-2">
@@ -88,7 +93,7 @@ export default function Footer() {
 
         <div className="mt-12 border-t border-slate-200 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-slate-400">
-            &copy; {new Date().getFullYear()} RiskBases. Alle rechten voorbehouden.
+            &copy; {new Date().getFullYear()} RiskBases.
           </p>
           <div className="flex items-center gap-4 text-xs text-slate-400">
             <Link href="/legal/privacy" className="hover:text-slate-600 transition-colors duration-200">
