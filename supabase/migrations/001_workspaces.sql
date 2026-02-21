@@ -34,6 +34,11 @@ create policy "Members can read workspace"
     )
   );
 
+-- Creator can read their own workspace (needed for INSERT ... RETURNING)
+create policy "Creator can read own workspace"
+  on public.workspaces for select
+  using (created_by = auth.uid());
+
 create policy "Owners can update workspace"
   on public.workspaces for update
   using (

@@ -123,6 +123,12 @@ export default function Navbar() {
             {t.nav.bookDemo}
           </Link>
           <Link
+            href="/login"
+            className="px-4 py-2 text-sm font-medium text-slate-600 transition-colors duration-200 hover:text-navy"
+          >
+            {t.nav.login}
+          </Link>
+          <Link
             href="/signup"
             className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:bg-accent-hover hover:shadow-md active:scale-[.98]"
           >
@@ -197,6 +203,13 @@ export default function Navbar() {
               className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-center text-sm font-medium text-slate-700 hover:border-slate-400 transition-colors"
             >
               {t.nav.bookDemo}
+            </Link>
+            <Link
+              href="/login"
+              onClick={() => setMobileOpen(false)}
+              className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-center text-sm font-medium text-slate-700 hover:border-slate-400 transition-colors"
+            >
+              {t.nav.login}
             </Link>
             <Link
               href="/signup"

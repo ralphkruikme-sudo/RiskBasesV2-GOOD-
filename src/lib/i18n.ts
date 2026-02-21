@@ -30,6 +30,7 @@ export interface Dictionary {
     pricing: string;
     about: string;
     faq: string;
+    login: string;
     bookDemo: string;
     getStarted: string;
   };
@@ -60,6 +61,7 @@ const nl: Dictionary = {
     about: "Over ons",
     faq: "FAQ",
     bookDemo: "Plan een demo",
+    login: "Inloggen",
     getStarted: "Gratis starten",
   },
   cookie: {
@@ -88,6 +90,7 @@ const en: Dictionary = {
     about: "About",
     faq: "FAQ",
     bookDemo: "Book a demo",
+    login: "Log in",
     getStarted: "Start free trial",
   },
   cookie: {
@@ -116,6 +119,7 @@ const de: Dictionary = {
     about: "Über uns",
     faq: "FAQ",
     bookDemo: "Demo buchen",
+    login: "Anmelden",
     getStarted: "Kostenlos starten",
   },
   cookie: {

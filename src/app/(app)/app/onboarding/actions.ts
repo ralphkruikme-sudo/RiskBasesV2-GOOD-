@@ -45,7 +45,7 @@ export async function createWorkspace(
   // Race-condition guard: already has workspace
   const { data: existing } = await supabase
     .from("workspace_members")
-    .select("id")
+    .select("workspace_id")
     .eq("user_id", user.id)
     .limit(1)
     .maybeSingle();
