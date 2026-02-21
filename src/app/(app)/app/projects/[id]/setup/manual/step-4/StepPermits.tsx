@@ -6,13 +6,10 @@ import { createClient } from "@/lib/supabase/client";
 
 interface Permit {
   id: string;
-  name: string;
-  type: string | null;
+  permit_type: string;
   status: string;
-  authority: string | null;
-  submitted_at: string | null;
-  expected_at: string | null;
-  approved_at: string | null;
+  expected_date: string | null;
+  actual_date: string | null;
   notes: string | null;
 }
 
@@ -41,13 +38,10 @@ const PERMIT_TYPES = [
 ];
 
 const EMPTY: Omit<Permit, "id"> = {
-  name: "",
-  type: "",
+  permit_type: "",
   status: "pending",
-  authority: "",
-  submitted_at: null,
-  expected_at: null,
-  approved_at: null,
+  expected_date: null,
+  actual_date: null,
   notes: "",
 };
 
@@ -70,13 +64,10 @@ export default function StepPermits({ projectId, initialPermits }: Props) {
   function openEdit(p: Permit) {
     setEditingId(p.id);
     setForm({
-      name: p.name,
-      type: p.type ?? "",
+      permit_type: p.permit_type ?? "",
       status: p.status,
-      authority: p.authority ?? "",
-      submitted_at: p.submitted_at,
-      expected_at: p.expected_at,
-      approved_at: p.approved_at,
+      expected_date: p.expected_date,
+      actual_date: p.actual_date,
       notes: p.notes ?? "",
     });
     setShowForm(true);
@@ -84,8 +75,8 @@ export default function StepPermits({ projectId, initialPermits }: Props) {
   }
 
   function handleSave() {
-    if (!form.name.trim()) {
-      setError("Naam is verplicht.");
+    if (!form.permit_type.trim()) {
+      setError("Type vergunning is verplicht.");
       return;
     }
     setError(null);
@@ -93,13 +84,10 @@ export default function StepPermits({ projectId, initialPermits }: Props) {
       const supabase = createClient();
       const payload = {
         project_id: projectId,
-        name: form.name.trim(),
-        type: form.type || null,
+        permit_type: form.permit_type.trim(),
         status: form.status,
-        authority: form.authority || null,
-        submitted_at: form.submitted_at || null,
-        expected_at: form.expected_at || null,
-        approved_at: form.approved_at || null,
+        expected_date: form.expected_date || null,
+        actual_date: form.actual_date || null,
         notes: form.notes || null,
       };
 
@@ -156,12 +144,8 @@ export default function StepPermits({ projectId, initialPermits }: Props) {
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">Naam *</label>
-              <input type="text" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-2 focus:outline-offset-0 focus:outline-accent" />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">Type</label>
-              <select value={form.type ?? ""} onChange={(e) => setForm((f) => ({ ...f, type: e.target.value }))} className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-2 focus:outline-offset-0 focus:outline-accent">
+              <label className="block text-xs font-medium text-slate-600 mb-1">Type vergunning *</label>
+              <select value={form.permit_type} onChange={(e) => setForm((f) => ({ ...f, permit_type: e.target.value }))} className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-2 focus:outline-offset-0 focus:outline-accent">
                 <option value="">Selecteer…</option>
                 {PERMIT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
@@ -173,16 +157,12 @@ export default function StepPermits({ projectId, initialPermits }: Props) {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">Bevoegd gezag</label>
-              <input type="text" value={form.authority ?? ""} onChange={(e) => setForm((f) => ({ ...f, authority: e.target.value }))} placeholder="Bijv. Gemeente Amsterdam" className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-2 focus:outline-offset-0 focus:outline-accent" />
+              <label className="block text-xs font-medium text-slate-600 mb-1">Verwachte datum</label>
+              <input type="date" value={form.expected_date ?? ""} onChange={(e) => setForm((f) => ({ ...f, expected_date: e.target.value || null }))} className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-2 focus:outline-offset-0 focus:outline-accent" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">Ingediend op</label>
-              <input type="date" value={form.submitted_at ?? ""} onChange={(e) => setForm((f) => ({ ...f, submitted_at: e.target.value || null }))} className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-2 focus:outline-offset-0 focus:outline-accent" />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">Verwachte afgifte</label>
-              <input type="date" value={form.expected_at ?? ""} onChange={(e) => setForm((f) => ({ ...f, expected_at: e.target.value || null }))} className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-2 focus:outline-offset-0 focus:outline-accent" />
+              <label className="block text-xs font-medium text-slate-600 mb-1">Werkelijke datum</label>
+              <input type="date" value={form.actual_date ?? ""} onChange={(e) => setForm((f) => ({ ...f, actual_date: e.target.value || null }))} className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-2 focus:outline-offset-0 focus:outline-accent" />
             </div>
             <div className="sm:col-span-2">
               <label className="block text-xs font-medium text-slate-600 mb-1">Opmerkingen</label>
@@ -208,26 +188,24 @@ export default function StepPermits({ projectId, initialPermits }: Props) {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-200">
-                <th className="text-left py-2 px-3 font-medium text-slate-600">Naam</th>
                 <th className="text-left py-2 px-3 font-medium text-slate-600">Type</th>
                 <th className="text-left py-2 px-3 font-medium text-slate-600">Status</th>
-                <th className="text-left py-2 px-3 font-medium text-slate-600">Bevoegd gezag</th>
                 <th className="text-left py-2 px-3 font-medium text-slate-600">Verwacht</th>
+                <th className="text-left py-2 px-3 font-medium text-slate-600">Werkelijk</th>
                 <th className="py-2 px-3"></th>
               </tr>
             </thead>
             <tbody>
               {permits.map((p) => (
                 <tr key={p.id} className="border-b border-slate-100 hover:bg-slate-50">
-                  <td className="py-2.5 px-3 font-medium text-slate-900">{p.name}</td>
-                  <td className="py-2.5 px-3 text-slate-600">{p.type ?? "—"}</td>
+                  <td className="py-2.5 px-3 font-medium text-slate-900">{p.permit_type}</td>
                   <td className="py-2.5 px-3">
                     <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${STATUSES.find((s) => s.value === p.status)?.color ?? ""}`}>
                       {STATUSES.find((s) => s.value === p.status)?.label}
                     </span>
                   </td>
-                  <td className="py-2.5 px-3 text-slate-600">{p.authority ?? "—"}</td>
-                  <td className="py-2.5 px-3 text-slate-600">{p.expected_at ?? "—"}</td>
+                  <td className="py-2.5 px-3 text-slate-600">{p.expected_date ?? "—"}</td>
+                  <td className="py-2.5 px-3 text-slate-600">{p.actual_date ?? "—"}</td>
                   <td className="py-2.5 px-3">
                     <div className="flex gap-1 justify-end">
                       <button type="button" onClick={() => openEdit(p)} className="rounded p-1 text-slate-400 hover:text-accent hover:bg-slate-100">

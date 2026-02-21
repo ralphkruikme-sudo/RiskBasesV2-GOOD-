@@ -8,10 +8,8 @@ import Link from "next/link";
 interface Project {
   id: string;
   name: string;
-  description: string | null;
   status: string;
-  sector: string | null;
-  reference: string | null;
+  module_id: string | null;
   start_date: string | null;
   end_date: string | null;
   created_at: string;
@@ -87,8 +85,7 @@ export default function PortfolioClient({
     const matchesSearch =
       !search ||
       p.name.toLowerCase().includes(search.toLowerCase()) ||
-      (p.reference && p.reference.toLowerCase().includes(search.toLowerCase())) ||
-      (p.sector && p.sector.toLowerCase().includes(search.toLowerCase()));
+      (p.module_id && p.module_id.toLowerCase().includes(search.toLowerCase()));
     const matchesStatus = statusFilter === "all" || p.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -151,7 +148,7 @@ export default function PortfolioClient({
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by name, reference, or sector…"
+            placeholder="Search by name or module…"
             className="w-full rounded-lg border border-slate-200 bg-white py-2 pl-10 pr-4 text-sm placeholder:text-slate-400 focus:outline-2 focus:outline-offset-0 focus:outline-accent"
           />
         </div>
@@ -216,10 +213,7 @@ export default function PortfolioClient({
                     Project
                   </th>
                   <th className="py-3 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500 hidden sm:table-cell">
-                    Reference
-                  </th>
-                  <th className="py-3 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500 hidden md:table-cell">
-                    Sector
+                    Module
                   </th>
                   <th className="py-3 px-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
                     Status
@@ -239,18 +233,10 @@ export default function PortfolioClient({
                   >
                     <td className="py-3.5 px-4">
                       <p className="text-sm font-medium text-slate-900">{project.name}</p>
-                      {project.description && (
-                        <p className="mt-0.5 text-xs text-slate-400 line-clamp-1">{project.description}</p>
-                      )}
                     </td>
                     <td className="py-3.5 px-4 hidden sm:table-cell">
-                      <span className="text-sm text-slate-500 font-mono">
-                        {project.reference || "—"}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4 hidden md:table-cell">
                       <span className="text-sm text-slate-500">
-                        {project.sector || "—"}
+                        {project.module_id || "—"}
                       </span>
                     </td>
                     <td className="py-3.5 px-4">

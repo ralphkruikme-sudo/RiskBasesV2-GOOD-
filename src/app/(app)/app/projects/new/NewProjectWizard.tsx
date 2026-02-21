@@ -6,11 +6,9 @@ import { createProject } from "./actions";
 
 interface Module {
   id: string;
-  slug: string;
   name: string;
   description: string | null;
-  icon: string | null;
-  enabled: boolean;
+  is_active: boolean;
 }
 
 const STEPS = ["Module", "Projectgegevens", "Invoermethode"];
@@ -172,25 +170,24 @@ export default function NewProjectWizard({ modules }: { modules: Module[] }) {
                 <button
                   key={m.id}
                   type="button"
-                  disabled={!m.enabled}
+                  disabled={!m.is_active}
                   onClick={() => {
                     setSelectedModule(m.id);
                     setError(null);
                   }}
                   className={`relative flex flex-col items-start rounded-xl border-2 p-4 text-left transition-all ${
-                    !m.enabled
+                    !m.is_active
                       ? "cursor-not-allowed border-slate-100 bg-slate-50 opacity-60"
                       : selectedModule === m.id
                       ? "border-accent bg-accent/5 ring-1 ring-accent/20"
                       : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm"
                   }`}
                 >
-                  <span className="text-2xl mb-2">{m.icon}</span>
                   <span className="font-semibold text-slate-900">{m.name}</span>
                   <span className="text-xs text-slate-500 mt-0.5">
                     {m.description}
                   </span>
-                  {!m.enabled && (
+                  {!m.is_active && (
                     <span className="absolute top-3 right-3 rounded-full bg-slate-200 px-2 py-0.5 text-[10px] font-semibold text-slate-500 uppercase tracking-wide">
                       Coming soon
                     </span>

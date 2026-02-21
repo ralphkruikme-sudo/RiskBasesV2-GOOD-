@@ -23,7 +23,7 @@ export default async function AppLayout({
 
   const { data: members, error: memberError } = await supabase
     .from("workspace_members")
-    .select("id, workspace_id")
+    .select("workspace_id")
     .eq("user_id", user.id)
     .limit(1);
 

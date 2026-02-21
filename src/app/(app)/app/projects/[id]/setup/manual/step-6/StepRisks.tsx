@@ -6,18 +6,17 @@ import { createClient } from "@/lib/supabase/client";
 
 interface Risk {
   id: string;
-  category: string | null;
+  category_key: string | null;
   title: string;
   description: string | null;
   probability: number | null;
   impact: number | null;
-  risk_score: number | null;
   status: string;
 }
 
 interface Template {
   id: string;
-  category: string;
+  category_key: string;
   title: string;
   description: string | null;
   default_probability: number | null;
@@ -60,7 +59,7 @@ export default function StepRisks({ projectId, initialRisks, templates }: Props)
   const [risks, setRisks] = useState<Risk[]>(initialRisks);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
-    category: "",
+    category_key: "",
     title: "",
     description: "",
     probability: 3,
@@ -76,7 +75,7 @@ export default function StepRisks({ projectId, initialRisks, templates }: Props)
       const supabase = createClient();
       const rows = templates.map((t) => ({
         project_id: projectId,
-        category: t.category,
+        category_key: t.category_key,
         title: t.title,
         description: t.description,
         probability: t.default_probability,
@@ -111,7 +110,7 @@ export default function StepRisks({ projectId, initialRisks, templates }: Props)
         .from("risks")
         .insert({
           project_id: projectId,
-          category: form.category || null,
+          category_key: form.category_key || null,
           title: form.title.trim(),
           description: form.description || null,
           probability: form.probability,
@@ -126,7 +125,7 @@ export default function StepRisks({ projectId, initialRisks, templates }: Props)
         return;
       }
       setRisks((prev) => [...prev, data]);
-      setForm({ category: "", title: "", description: "", probability: 3, impact: 3 });
+      setForm({ category_key: "", title: "", description: "", probability: 3, impact: 3 });
       setShowForm(false);
     });
   }
@@ -177,7 +176,7 @@ export default function StepRisks({ projectId, initialRisks, templates }: Props)
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-medium text-slate-600 mb-1">Categorie</label>
-              <input type="text" value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))} placeholder="Bijv. Planning, Kosten, Veiligheid" className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-2 focus:outline-offset-0 focus:outline-accent" />
+              <input type="text" value={form.category_key} onChange={(e) => setForm((f) => ({ ...f, category_key: e.target.value }))} placeholder="Bijv. Planning, Kosten, Veiligheid" className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-2 focus:outline-offset-0 focus:outline-accent" />
             </div>
             <div>
               <label className="block text-xs font-medium text-slate-600 mb-1">Titel *</label>
@@ -229,16 +228,17 @@ export default function StepRisks({ projectId, initialRisks, templates }: Props)
             </thead>
             <tbody>
               {risks.map((r) => {
-                const level = scoreLevel(r.risk_score);
+                const score = (r.probability ?? 0) * (r.impact ?? 0);
+                const level = scoreLevel(score);
                 return (
                   <tr key={r.id} className="border-b border-slate-100 hover:bg-slate-50">
-                    <td className="py-2.5 px-3 text-slate-500">{r.category ?? "—"}</td>
+                    <td className="py-2.5 px-3 text-slate-500">{r.category_key ?? "—"}</td>
                     <td className="py-2.5 px-3 font-medium text-slate-900">{r.title}</td>
                     <td className="py-2.5 px-3 text-center text-slate-600">{r.probability ?? "—"}</td>
                     <td className="py-2.5 px-3 text-center text-slate-600">{r.impact ?? "—"}</td>
                     <td className="py-2.5 px-3 text-center">
                       <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${SCORE_COLOR[level]}`}>
-                        {r.risk_score ?? "—"}
+                        {score}
                       </span>
                     </td>
                     <td className="py-2.5 px-3 text-right">

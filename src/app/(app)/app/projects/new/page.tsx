@@ -12,8 +12,8 @@ export default async function NewProjectPage() {
   // Fetch available modules
   const { data: modules } = await supabase
     .from("modules")
-    .select("id, slug, name, description, icon, enabled")
-    .order("sort_order");
+    .select("id, name, description, is_active")
+    .order("name");
 
   return <NewProjectWizard modules={modules ?? []} />;
 }

@@ -141,7 +141,7 @@ export default function CsvSetup({ projectId, projectName }: Props) {
       // Insert risks
       const riskRows = parsed.map((r) => ({
         project_id: projectId,
-        category: r.category || null,
+        category_key: r.category || null,
         title: r.title,
         description: r.description || null,
         probability: r.probability,

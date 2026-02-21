@@ -16,7 +16,7 @@ export default async function ProjectDashboardPage({ params }: PageProps) {
 
   const { data: project } = await supabase
     .from("projects")
-    .select("id, name, status, setup_status, sector, start_date, end_date")
+    .select("id, name, status, setup_status, start_date, end_date")
     .eq("id", id)
     .single();
 
@@ -29,7 +29,7 @@ export default async function ProjectDashboardPage({ params }: PageProps) {
 
   // Gather stats
   const [riskRes, actionRes, stakeholderRes] = await Promise.all([
-    supabase.from("risks").select("id, risk_score, status").eq("project_id", id),
+    supabase.from("risks").select("id, probability, impact, status").eq("project_id", id),
     supabase.from("actions").select("id, status").eq("project_id", id),
     supabase.from("stakeholders").select("id").eq("project_id", id),
   ]);
@@ -39,7 +39,10 @@ export default async function ProjectDashboardPage({ params }: PageProps) {
   const stakeholders = stakeholderRes.data ?? [];
 
   const openRisks = risks.filter((r) => r.status === "open").length;
-  const highRisks = risks.filter((r) => r.risk_score && r.risk_score >= 15).length;
+  const highRisks = risks.filter((r) => {
+    const score = (r.probability ?? 0) * (r.impact ?? 0);
+    return score >= 15;
+  }).length;
   const openActions = actions.filter((a) => a.status === "open" || a.status === "in_progress").length;
 
   const stats = [
@@ -65,9 +68,6 @@ export default async function ProjectDashboardPage({ params }: PageProps) {
           </Link>
           <h1 className="text-2xl font-bold text-slate-900">{project.name}</h1>
           <div className="flex items-center gap-3 mt-1">
-            {project.sector && (
-              <span className="text-sm text-slate-500">{project.sector}</span>
-            )}
             {project.start_date && project.end_date && (
               <span className="text-xs text-slate-400">
                 {project.start_date} — {project.end_date}
@@ -122,7 +122,8 @@ export default async function ProjectDashboardPage({ params }: PageProps) {
               </thead>
               <tbody>
                 {risks
-                  .sort((a, b) => (b.risk_score ?? 0) - (a.risk_score ?? 0))
+                  .map((r) => ({ ...r, _score: (r.probability ?? 0) * (r.impact ?? 0) }))
+                  .sort((a, b) => b._score - a._score)
                   .slice(0, 10)
                   .map((r) => (
                     <tr key={r.id} className="border-b border-slate-50 hover:bg-slate-50">
@@ -130,16 +131,16 @@ export default async function ProjectDashboardPage({ params }: PageProps) {
                       <td className="py-2.5 px-4 text-center">
                         <span
                           className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-bold ${
-                            (r.risk_score ?? 0) >= 15
+                            r._score >= 15
                               ? "bg-red-100 text-red-700"
-                              : (r.risk_score ?? 0) >= 10
+                              : r._score >= 10
                               ? "bg-orange-100 text-orange-700"
-                              : (r.risk_score ?? 0) >= 5
+                              : r._score >= 5
                               ? "bg-yellow-100 text-yellow-700"
                               : "bg-green-100 text-green-700"
                           }`}
                         >
-                          {r.risk_score ?? "—"}
+                          {r._score}
                         </span>
                       </td>
                       <td className="py-2.5 px-4 text-slate-500 capitalize">{r.status}</td>

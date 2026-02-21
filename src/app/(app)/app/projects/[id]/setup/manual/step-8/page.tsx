@@ -19,15 +19,15 @@ export default async function Step8Page({ params }: PageProps) {
         .eq("project_id", project.id),
       supabase
         .from("stakeholders")
-        .select("id, name, role, influence_level, sentiment")
+        .select("id, name, stakeholder_type, influence_level, sentiment")
         .eq("project_id", project.id),
       supabase
         .from("permits")
-        .select("id, name, status, type")
+        .select("id, permit_type, status")
         .eq("project_id", project.id),
       supabase
         .from("risks")
-        .select("id, title, category, probability, impact, risk_score")
+        .select("id, title, category_key, probability, impact")
         .eq("project_id", project.id),
       supabase
         .from("actions")

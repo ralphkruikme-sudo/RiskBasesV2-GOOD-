@@ -32,27 +32,18 @@ export async function createProject(formData: FormData) {
     return { error: "Geen workspace gevonden." };
   }
 
-  // Get module to determine sector label
-  const { data: mod } = await supabase
-    .from("modules")
-    .select("name")
-    .eq("id", moduleId)
-    .single();
-
   const { data: project, error } = await supabase
     .from("projects")
     .insert({
       workspace_id: membership.workspace_id,
       module_id: moduleId,
       name,
-      sector: mod?.name ?? null,
       start_date: startDate || null,
       end_date: endDate || null,
       ingest_type: ingestType,
       setup_status: "in_progress",
       status: "draft",
       created_by: user.id,
-      owner_id: user.id,
     })
     .select("id")
     .single();

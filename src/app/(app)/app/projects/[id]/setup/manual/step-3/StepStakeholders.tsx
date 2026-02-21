@@ -7,8 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 interface Stakeholder {
   id: string;
   name: string;
-  role: string | null;
-  organisation: string | null;
+  stakeholder_type: string | null;
   email: string | null;
   phone: string | null;
   influence_level: string | null;
@@ -36,8 +35,7 @@ const SENTIMENTS = [
 
 const EMPTY: Omit<Stakeholder, "id"> = {
   name: "",
-  role: "",
-  organisation: "",
+  stakeholder_type: "",
   email: "",
   phone: "",
   influence_level: "medium",
@@ -65,8 +63,7 @@ export default function StepStakeholders({ projectId, initialStakeholders }: Pro
     setEditingId(s.id);
     setForm({
       name: s.name,
-      role: s.role ?? "",
-      organisation: s.organisation ?? "",
+      stakeholder_type: s.stakeholder_type ?? "",
       email: s.email ?? "",
       phone: s.phone ?? "",
       influence_level: s.influence_level ?? "medium",
@@ -88,8 +85,7 @@ export default function StepStakeholders({ projectId, initialStakeholders }: Pro
       const payload = {
         project_id: projectId,
         name: form.name.trim(),
-        role: form.role || null,
-        organisation: form.organisation || null,
+        stakeholder_type: form.stakeholder_type || null,
         email: form.email || null,
         phone: form.phone || null,
         influence_level: form.influence_level || null,
@@ -174,22 +170,13 @@ export default function StepStakeholders({ projectId, initialStakeholders }: Pro
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">Rol</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">Type</label>
               <input
                 type="text"
-                value={form.role ?? ""}
-                onChange={(e) => setForm((f) => ({ ...f, role: e.target.value }))}
-                placeholder="Bijv. Projectmanager"
+                value={form.stakeholder_type ?? ""}
+                onChange={(e) => setForm((f) => ({ ...f, stakeholder_type: e.target.value }))}
+                placeholder="Bijv. Projectmanager, Aannemer"
                 className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-2 focus:outline-offset-0 focus:outline-accent"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1">Organisatie</label>
-              <input
-                type="text"
-                value={form.organisation ?? ""}
-                onChange={(e) => setForm((f) => ({ ...f, organisation: e.target.value }))}
-                className="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-2 focus:outline-offset-0 focus:outline-accent"
               />
             </div>
             <div>
@@ -273,8 +260,7 @@ export default function StepStakeholders({ projectId, initialStakeholders }: Pro
             <thead>
               <tr className="border-b border-slate-200">
                 <th className="text-left py-2 px-3 font-medium text-slate-600">Naam</th>
-                <th className="text-left py-2 px-3 font-medium text-slate-600">Rol</th>
-                <th className="text-left py-2 px-3 font-medium text-slate-600">Organisatie</th>
+                <th className="text-left py-2 px-3 font-medium text-slate-600">Type</th>
                 <th className="text-left py-2 px-3 font-medium text-slate-600">Invloed</th>
                 <th className="text-left py-2 px-3 font-medium text-slate-600">Sentiment</th>
                 <th className="py-2 px-3"></th>
@@ -284,8 +270,7 @@ export default function StepStakeholders({ projectId, initialStakeholders }: Pro
               {stakeholders.map((s) => (
                 <tr key={s.id} className="border-b border-slate-100 hover:bg-slate-50">
                   <td className="py-2.5 px-3 font-medium text-slate-900">{s.name}</td>
-                  <td className="py-2.5 px-3 text-slate-600">{s.role ?? "—"}</td>
-                  <td className="py-2.5 px-3 text-slate-600">{s.organisation ?? "—"}</td>
+                  <td className="py-2.5 px-3 text-slate-600">{s.stakeholder_type ?? "—"}</td>
                   <td className="py-2.5 px-3">
                     {s.influence_level && (
                       <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${

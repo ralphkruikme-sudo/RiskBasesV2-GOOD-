@@ -11,23 +11,21 @@ interface IntakeValue {
 interface Stakeholder {
   id: string;
   name: string;
-  role: string | null;
+  stakeholder_type: string | null;
   influence_level: string | null;
   sentiment: string | null;
 }
 interface Permit {
   id: string;
-  name: string;
+  permit_type: string;
   status: string;
-  type: string | null;
 }
 interface Risk {
   id: string;
   title: string;
-  category: string | null;
+  category_key: string | null;
   probability: number | null;
   impact: number | null;
-  risk_score: number | null;
 }
 interface Action {
   id: string;
@@ -99,7 +97,7 @@ export default function StepReview({
   }
 
   const highRisks = risks.filter(
-    (r) => r.risk_score && r.risk_score >= 15
+    (r) => (r.probability ?? 0) * (r.impact ?? 0) >= 15
   ).length;
 
   return (
@@ -151,7 +149,7 @@ export default function StepReview({
               {stakeholders.slice(0, 5).map((s) => (
                 <li key={s.id} className="flex justify-between">
                   <span>{s.name}</span>
-                  <span className="text-slate-400">{s.role ?? ""}</span>
+                  <span className="text-slate-400">{s.stakeholder_type ?? ""}</span>
                 </li>
               ))}
             </ul>
@@ -166,7 +164,7 @@ export default function StepReview({
             <ul className="space-y-1 text-xs text-slate-600">
               {permits.map((p) => (
                 <li key={p.id} className="flex justify-between">
-                  <span>{p.name}</span>
+                  <span>{p.permit_type}</span>
                   <span className="text-slate-400">{p.status}</span>
                 </li>
               ))}
@@ -184,7 +182,7 @@ export default function StepReview({
                 {risks.slice(0, 5).map((r) => (
                   <li key={r.id} className="flex justify-between">
                     <span className="truncate max-w-[70%]">{r.title}</span>
-                    <span className="font-semibold">{r.risk_score ?? "—"}</span>
+                    <span className="font-semibold">{(r.probability ?? 0) * (r.impact ?? 0)}</span>
                   </li>
                 ))}
                 {risks.length > 5 && (
